@@ -1,0 +1,44 @@
+//
+//  TabController.swift
+//  HZ
+//
+//  Created by Алик on 01.10.2025.
+//
+
+import UIKit
+
+class TabController: UITabBarController { //TODO: 3 - final class
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        self.setupTabs() //TODO: 2 - можно без self, знаешь, почему?
+
+        // Do any additional setup after loading the view. //TODO: 1 - комментарии подобного рода принято удалять
+    }
+    
+    private func setupTabs(){
+                
+        let oneTab = createNav(with: "One", and: UIImage(systemName: "check_circle"), vc: One()) //TODO: это точно должно тут инициализироваться?
+        let twoTab = createNav(with: "Two", and: UIImage(systemName: "favorite"), vc: Two())
+        
+        
+        self.setViewControllers([oneTab, twoTab], animated: true)
+        
+    }
+
+    private func createNav(with title: String, and image: UIImage?, vc: UIViewController) -> UINavigationController {
+        
+        let nav = UINavigationController(rootViewController: vc)
+        
+        //TODO: 1 - данный метод отвечает за создание и настройку вьюшки, а не за настройку таббара. Во первых, метод выполняет не свою задачку, во вторых, он вызывается два раза и ты два раза задаешь тайтл и картинку таббару
+        nav.tabBarItem.title = title
+        nav.tabBarItem.image = image //TODO: 1 - а картинки в итоге то где?
+        nav.viewControllers.first?.navigationItem.title = title + " Controller"
+        nav.viewControllers.first?.navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Button", style: .plain, target: nil, action: nil)
+        return nav
+    }
+
+    
+    
+    
+}
