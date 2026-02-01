@@ -13,7 +13,7 @@ struct UnsplashPhoto: Codable {
     let user: User
 }
 
-struct PhotoURLs: Codable { //TODO: 1 - тебе все свойства нужны? может стоит от каких-то избавитья, которые не используется - в этой и в других codable моделях 
+struct PhotoURLs: Codable { // все ли свойства нужны? может стоит от каких-то избавитья, которые не используется - в этой и в других codable моделях
     let raw: String
     let full: String
     let regular: String

@@ -23,7 +23,7 @@ class UnsplashService: UnsplashServiceProtocol {
         let urlString = "\(baseURL)/photos/random?count=\(count)" //TODO: 2 - отдельный билдер урлов, сервис ходит в сеть, он должен получать уже готовый урл, нужно разделять ответственность классов, один класс - одна задача
         
         guard let url = URL(string: urlString) else {
-            completion(.failure(NetworkError.invalidURL))
+            completion(.failure(NetworkError.invalidURL))// перенёс перечисление в отдельный файл, но ничего не загорелось красным. Доступ остался.?????
             return
         }
         
@@ -79,8 +79,4 @@ class UnsplashService: UnsplashServiceProtocol {
     }
 }
 
-enum NetworkError: Error { //TODO: 2 - вынести в отдельный файлик, слишком много всего в рамках одного файлика накидано
-    case invalidURL
-    case noData
-    case decodingError
-}
+

@@ -18,6 +18,9 @@
 		0007D16C2E91C8C200F57884 /* CustomCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007D16B2E91C8C200F57884 /* CustomCollectionViewCell.swift */; };
 		0007D16E2E93138A00F57884 /* UnsplashService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007D16D2E93138A00F57884 /* UnsplashService.swift */; };
 		0007D1702E93151A00F57884 /* UnsplashPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0007D16F2E93151A00F57884 /* UnsplashPhoto.swift */; };
+		0009B9DE2F0E5D2B00E82DCC /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0009B9DD2F0E5D2B00E82DCC /* NetworkError.swift */; };
+		0009B9E12F1112CF00E82DCC /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0009B9E02F1112CF00E82DCC /* Pagination.swift */; };
+		007BC4502F2E104000ABFB6C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007BC44F2F2E104000ABFB6C /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +37,9 @@
 		0007D16B2E91C8C200F57884 /* CustomCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCollectionViewCell.swift; sourceTree = "<group>"; };
 		0007D16D2E93138A00F57884 /* UnsplashService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashService.swift; sourceTree = "<group>"; };
 		0007D16F2E93151A00F57884 /* UnsplashPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsplashPhoto.swift; sourceTree = "<group>"; };
+		0009B9DD2F0E5D2B00E82DCC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
+		0009B9E02F1112CF00E82DCC /* Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pagination.swift; sourceTree = "<group>"; };
+		007BC44F2F2E104000ABFB6C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,9 +86,7 @@
 			children = (
 				0007D14B2E8DBC4E00F57884 /* AppDelegate.swift */,
 				0007D14D2E8DBC4E00F57884 /* SceneDelegate.swift */,
-				0007D1512E8DBC4E00F57884 /* Main.storyboard */,
 				0007D1542E8DBC5100F57884 /* Assets.xcassets */,
-				0007D1562E8DBC5100F57884 /* LaunchScreen.storyboard */,
 			);
 			path = Supporting;
 			sourceTree = "<group>";
@@ -92,6 +96,9 @@
 			children = (
 				0007D16B2E91C8C200F57884 /* CustomCollectionViewCell.swift */,
 				0007D16F2E93151A00F57884 /* UnsplashPhoto.swift */,
+				0009B9DD2F0E5D2B00E82DCC /* NetworkError.swift */,
+				0009B9E02F1112CF00E82DCC /* Pagination.swift */,
+				007BC44F2F2E104000ABFB6C /* Constants.swift */,
 			);
 			path = M;
 			sourceTree = "<group>";
@@ -99,8 +106,8 @@
 		0007D1692E9126C400F57884 /* V */ = {
 			isa = PBXGroup;
 			children = (
-				0007D1602E8DC20000F57884 /* One.swift */,
-				0007D1622E8DC20E00F57884 /* Two.swift */,
+				0007D1512E8DBC4E00F57884 /* Main.storyboard */,
+				0007D1562E8DBC5100F57884 /* LaunchScreen.storyboard */,
 			);
 			path = V;
 			sourceTree = "<group>";
@@ -108,8 +115,10 @@
 		0007D16A2E9126F200F57884 /* C */ = {
 			isa = PBXGroup;
 			children = (
+				0007D1602E8DC20000F57884 /* One.swift */,
 				0007D1642E8DC35E00F57884 /* TabController.swift */,
 				0007D16D2E93138A00F57884 /* UnsplashService.swift */,
+				0007D1622E8DC20E00F57884 /* Two.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -186,11 +195,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				0007D1652E8DC35E00F57884 /* TabController.swift in Sources */,
+				007BC4502F2E104000ABFB6C /* Constants.swift in Sources */,
 				0007D1702E93151A00F57884 /* UnsplashPhoto.swift in Sources */,
 				0007D16C2E91C8C200F57884 /* CustomCollectionViewCell.swift in Sources */,
 				0007D14C2E8DBC4E00F57884 /* AppDelegate.swift in Sources */,
 				0007D1632E8DC20E00F57884 /* Two.swift in Sources */,
 				0007D1612E8DC20000F57884 /* One.swift in Sources */,
+				0009B9DE2F0E5D2B00E82DCC /* NetworkError.swift in Sources */,
+				0009B9E12F1112CF00E82DCC /* Pagination.swift in Sources */,
 				0007D14E2E8DBC4E00F57884 /* SceneDelegate.swift in Sources */,
 				0007D16E2E93138A00F57884 /* UnsplashService.swift in Sources */,
 			);

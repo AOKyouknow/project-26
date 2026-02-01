@@ -7,21 +7,18 @@
 
 import UIKit
 
-class TabController: UITabBarController { //TODO: 3 - final class
+final class TabController: UITabBarController { //TODO: final class. ПОЩЕМУ????
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.setupTabs() //TODO: 2 - можно без self, знаешь, почему?
+        setupTabs() // можно без self, почему?!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-        // Do any additional setup after loading the view. //TODO: 1 - комментарии подобного рода принято удалять
     }
     
     private func setupTabs(){
                 
-        let oneTab = createNav(with: "One", and: UIImage(systemName: "check_circle"), vc: One()) //TODO: это точно должно тут инициализироваться?
+        let oneTab = createNav(with: "One", and: UIImage(systemName: "check_circle"), vc: One()) //TODO: это точно должно тут инициализироваться? В ГДЕ ЕЩË?
         let twoTab = createNav(with: "Two", and: UIImage(systemName: "favorite"), vc: Two())
-        
-        
         self.setViewControllers([oneTab, twoTab], animated: true)
         
     }
