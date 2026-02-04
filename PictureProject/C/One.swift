@@ -12,23 +12,14 @@
 import UIKit
 
 class One: UIViewController {
-    
-    // MARK: - вместо variables ПРОБУЮ ПАГИНАЦИЮ
+    // MARK: - variables
     private var images: [UIImage] = []
-    private var currentPage = 1          // Текущая страница, начинаем с 1
-    private var isLoading = false        // Флаг загрузки, чтобы не грузить одновременно несколько страниц
-    private var hasMorePhotos = true    // Есть ли еще фото для загрузки
-    private let photosPerPage = 20      // Сколько фото грузить за один раз (не 26!)
+    private var currentPage = 1// Текущая страница, начинаем с 1
+    private var isLoading = false// Флаг загрузки, чтобы не грузить одновременно несколько страниц. Чтобы не начать новую загрузку, пока идет старая.
+    private let photosPerPage = 30// Сколько фото грузить за раз
+    private let unsplashService: UnsplashServiceProtocol = UnsplashService()
     
-    
-    
-    
-    // MARK: - Variables
-    
-//    // 1) первое. создаю массив изображений.
-//    private var images: [UIImage] = []
-//    private let unsplashService: UnsplashServiceProtocol = UnsplashService()//после сервиса //TODO: 3 - иницализация классов должно происходить в ините, извне, на тот случай, если ты захочешь исползовать другой сервис, но под этим же протоколом
-//    private let loadingIndicator = UIActivityIndicatorView(style: .large)//Создает индикатор загрузки (крутящийся спиннер).Показывается пользователю, когда идёт загрузка фотографий
+    private var loadTask: Task<Void, Never>?// async: переменная для хранения Task
     
     //MARK: - Components
     private lazy var collectionView: UICollectionView = {
@@ -43,56 +34,83 @@ class One: UIViewController {
     //MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.view.backgroundColor = .systemRed //TODO: 1 - можно без self, и где systemRed?
-        // Do any additional setup after loading the view.
+        self.view.backgroundColor = .systemRed //TODO: 1 - можно без self
         
-        //ЗДЕСЬ ДОЛЖЕН БЫТЬ ЦИКЛ, ПЕРЕБИРАЮЩИЙ ИЗОБРАЖЕНИЯ!!!!!!!!!!!!!
-        for _ in 0...25 { //TODO: 1 - вынести в отдельный метод. Я увидел только эти картинки, у тебя фактическая загрузка работает? может быть у меня прболема с доступами, я поэтому уточняю
-            if let image = UIImage(systemName: "photo") {  // 2. Пробуем создать изображение
-                images.append(image) // 3. Добавляем в массив
-            }
-        }
-        setupLoadingIndicator()
-        loadRandomPhotos()
         setupUI()
-        
-        //ПЕРЕМЕСТИЛ ВНУТРЬ viewDidLoad
         //это прописываю после регистрации cell. сделал модель, зарегистрировал, теперь сюжа прописываю.
         self.collectionView.dataSource = self //TODO: - чтобы показывать ячейки
-        self.collectionView.delegate = self
-        //как только прописал эти вещи, потребовалось создать протокол под классом.нахуя?:D //TODO: для того, чтобы можно было работать с ячейками в целом, обрабатывать тачи и прочее
+        self.collectionView.delegate = self//как только прописал эти вещи, потребовалось создать протокол под классом.TODO: для того, чтобы можно было работать с ячейками в целом, обрабатывать тачи и прочее
+        self.collectionView.prefetchDataSource = self
+        
+        loadRandomPhotos()
+        
     }
-    
-    private func setupLoadingIndicator() { //TODO: мы его так и не увидели, он точно есть? видим красные плейсхолдеры, не индикаторы
-        loadingIndicator.translatesAutoresizingMaskIntoConstraints = false
-        loadingIndicator.color = .systemGray
-        loadingIndicator.hidesWhenStopped = true
-        view.addSubview(loadingIndicator)
-        NSLayoutConstraint.activate([
-            loadingIndicator.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            loadingIndicator.centerYAnchor.constraint(equalTo: view.centerYAnchor)
-        ])
-    }
-    private func loadRandomPhotos() {
-            loadingIndicator.startAnimating()
-            // ВОТ ЗДЕСЬ ПРОПИСАНО СТРОГО 26 КАРТИНОК ЗАГРУЖАТЬ!!!!!!!!очереди!!!!!!
-            unsplashService.fetchRandomPhotos(count: 26) { [weak self] result in
-                DispatchQueue.main.async {
-                    self?.loadingIndicator.stopAnimating()
+    // отменяем Task при уходе с экрана
+       override func viewWillDisappear(_ animated: Bool) {
+           super.viewWillDisappear(animated)
+           loadTask?.cancel() // Отменяем текущую загрузку
+       }
+// MARK: - ЗАГРУЗКА ИЗОБРАЖЕНИЙ. метод с async/await
+        private func loadRandomPhotos() {
+            guard !isLoading else {
+                print("Уже грузится")
+                return
+            }
+            
+            print("Начинается загрузку страницы \(currentPage)")
+            isLoading = true
+            
+            // ОТМЕНЯЕМ предыдущую задачу если она есть
+            loadTask?.cancel()
+            
+            // СОЗДАЕМ новую Task
+            loadTask = Task {
+                do {
+                    // Загружаем фото асинхронно
+                    let downloadedImages = try await unsplashService.fetchRandomPhotosAsync(count: photosPerPage)
                     
-                    switch result {
-                    case .success(let downloadedImages):
-                        self?.images = downloadedImages
-                        self?.collectionView.reloadData()
+                    // проверяем не отменили ли задачу
+                    guard !Task.isCancelled else {
+                        print("Задача отменена")
+                        return
+                    }
+                    
+                    // Обновляем UI в главном потоке
+                    await MainActor.run {
+                        self.isLoading = false
                         
-                    case .failure(let error):
-                        print("Error loading photos: \(error)")
-                       
+                        if self.currentPage == 1 {
+                            self.images = downloadedImages
+                        } else {
+                            self.images.append(contentsOf: downloadedImages)
+                        }
+                        
+                        self.currentPage += 1
+                        self.collectionView.reloadData()
+                        
+                        print("Страница \(self.currentPage - 1) загружена: \(downloadedImages.count) фото")
+                    }
+                    
+                } catch {
+                    // Обработка ошибок
+                    guard !Task.isCancelled else {
+                        print("Задача отменена (ошибка)")
+                        return
+                    }
+                    
+                    await MainActor.run {
+                        self.isLoading = false
+                        print("Ошибка загрузки: \(error)")
                     }
                 }
             }
         }
-    
+        
+        private func loadNextPage() {
+            loadRandomPhotos()
+        }
+        
+  
     private func setupUI() {
         // установил constrains
         self.view.addSubview(collectionView)
@@ -171,4 +189,26 @@ extension One: UICollectionViewDelegateFlowLayout{
 //                        insetForSectionAt section: Int) -> UIEdgeInsets {
 //        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 //    }
+}
+extension One: UICollectionViewDataSourcePrefetching {
+    func collectionView(_ collectionView: UICollectionView,
+                       prefetchItemsAt indexPaths: [IndexPath]) {
+        
+        // Находим максимальный индекс среди предзагружаемых
+        let maxPrefetchIndex = indexPaths.map { $0.row }.max() ?? 0
+        
+        // Вычисляем насколько далеко от конца
+        let distanceFromEnd = images.count - maxPrefetchIndex
+        
+        print("Максимальный индекс: \(maxPrefetchIndex), от конца: \(distanceFromEnd)")
+        
+        // Если осталось меньше 5 ячеек до конца
+        if distanceFromEnd <= 5 {
+            if !isLoading {
+                loadNextPage()
+            } else {
+                print("Уже грузится")
+            }
+        }
+    }
 }

@@ -11,6 +11,9 @@ import Foundation
 
 protocol UnsplashServiceProtocol {
     func fetchRandomPhotos(count: Int, completion: @escaping (Result<[UIImage], Error>) -> Void)
+    
+    // Новый async метод
+       func fetchRandomPhotosAsync(count: Int) async throws -> [UIImage]
 }
 
 //TODO: 1 - можно написать некий базовы класс, который будет выполнять роль основного сервиса, то есть если тебе потребуется с 10 экранов делать 10 запросов, чтобы не писать каждый раз один и тот же код, создавая URL.session, а, например, а) наследоваться от основного класса б) сделать некий сервис прослойку, который будет обращаться к основному сервису, прокидывая в него только урл и другие нужные данные. В то же время протокол по-прежнему нужен, это очень хорошо.
@@ -49,6 +52,24 @@ class UnsplashService: UnsplashServiceProtocol {
             }
         }.resume()
     }
+    
+    // async
+    func fetchRandomPhotosAsync(count: Int) async throws -> [UIImage] {
+            // Просто оборачиваем старый метод в async обертку
+            return try await withCheckedThrowingContinuation { continuation in
+                fetchRandomPhotos(count: count) { result in
+                    switch result {
+                    case .success(let images):
+                        continuation.resume(returning: images)
+                    case .failure(let error):
+                        continuation.resume(throwing: error)
+                    }
+                }
+            }
+        }
+    
+    
+    
     
     private func downloadImages(from photos: [UnsplashPhoto], completion: @escaping (Result<[UIImage], Error>) -> Void) {
         let group = DispatchGroup()
