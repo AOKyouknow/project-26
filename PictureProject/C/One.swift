@@ -21,6 +21,12 @@ class One: UIViewController {
     
     private var loadTask: Task<Void, Never>?// async: переменная для хранения Task
     
+    //переменные для поиска
+    private let searchBar = UISearchBar()
+    private let searchButton = UIButton(type: .system)
+    
+    
+    
     //MARK: - Components
     private lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -37,6 +43,8 @@ class One: UIViewController {
         self.view.backgroundColor = .systemRed //TODO: 1 - можно без self
         
         setupUI()
+        setupSearchBar()// добавляем поиск бар) (бара?))))
+        
         //это прописываю после регистрации cell. сделал модель, зарегистрировал, теперь сюжа прописываю.
         self.collectionView.dataSource = self //TODO: - чтобы показывать ячейки
         self.collectionView.delegate = self//как только прописал эти вещи, потребовалось создать протокол под классом.TODO: для того, чтобы можно было работать с ячейками в целом, обрабатывать тачи и прочее
@@ -122,13 +130,6 @@ class One: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: self.view.trailingAnchor)
         ])
     }
-//ДРУГОЙ ВАРИАНТ КОНСТРЕЙНТОВ. КОГДА collectionView учитывает safe area. когда этот вариант работает, то проявляется красный бэкграунд, который я выставил в настройках для теста. В ЧËМ ПРИНЦИПИАЛЬНАЯ РАЗНИЦА ПРИВЯЗКИ КОНСТРЕЙНТОВ К safe area????????????????
-//        NSLayoutConstraint.activate([
-//        collectionView.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor),
-//        collectionView.bottomAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.bottomAnchor),
-//        collectionView.leadingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.leadingAnchor),
-//        collectionView.trailingAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.trailingAnchor)
-//    ])
 }
   // MARK: - ПРОТОКОЛЫ
 //Создаём ячейки.
@@ -211,4 +212,37 @@ extension One: UICollectionViewDataSourcePrefetching {
             }
         }
     }
+}
+
+extension One: UISearchBarDelegate{
+    //поиск
+//    private let searchBar = UISearchBar()
+//    private let searchButton = UIButton(type: .system)
+//    ПЕРЕМЕННЫЕ ДЛЯ ПОИСКА ПРИШЛОСЬ ПЕРЕМЕСТИТЬ В ОБЪЯВЛЕНИЕ КЛАССА.
+    
+    private func setupSearchBar() {
+        view.backgroundColor = .white
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.searchBarStyle = .default
+        view.addSubview(searchBar)// Добавление на view
+        view.addSubview(searchButton)// Добавление на view
+        NSLayoutConstraint.activate([
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
+        ])
+        
+    }
+    
+    
+    
+    
+    
+
+
+    
+    
+    
+    
 }

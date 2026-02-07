@@ -21,6 +21,7 @@
 		0009B9DE2F0E5D2B00E82DCC /* NetworkError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0009B9DD2F0E5D2B00E82DCC /* NetworkError.swift */; };
 		0009B9E12F1112CF00E82DCC /* Pagination.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0009B9E02F1112CF00E82DCC /* Pagination.swift */; };
 		007BC4502F2E104000ABFB6C /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 007BC44F2F2E104000ABFB6C /* Constants.swift */; };
+		0097ABD82F371911009CB197 /* UnplashManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0097ABD72F371911009CB197 /* UnplashManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +41,7 @@
 		0009B9DD2F0E5D2B00E82DCC /* NetworkError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkError.swift; sourceTree = "<group>"; };
 		0009B9E02F1112CF00E82DCC /* Pagination.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pagination.swift; sourceTree = "<group>"; };
 		007BC44F2F2E104000ABFB6C /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		0097ABD72F371911009CB197 /* UnplashManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnplashManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +121,7 @@
 				0007D1642E8DC35E00F57884 /* TabController.swift */,
 				0007D16D2E93138A00F57884 /* UnsplashService.swift */,
 				0007D1622E8DC20E00F57884 /* Two.swift */,
+				0097ABD72F371911009CB197 /* UnplashManager.swift */,
 			);
 			path = C;
 			sourceTree = "<group>";
@@ -195,6 +198,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0007D1652E8DC35E00F57884 /* TabController.swift in Sources */,
+				0097ABD82F371911009CB197 /* UnplashManager.swift in Sources */,
 				007BC4502F2E104000ABFB6C /* Constants.swift in Sources */,
 				0007D1702E93151A00F57884 /* UnsplashPhoto.swift in Sources */,
 				0007D16C2E91C8C200F57884 /* CustomCollectionViewCell.swift in Sources */,
