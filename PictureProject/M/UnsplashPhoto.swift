@@ -8,7 +8,7 @@
 import Foundation
 
 // MARK: - Модель фотографии
-struct UnsplashPhoto: Codable {
+struct UnsplashPhoto: Decodable {
     let id: String
     let urls: PhotoURLs
     let user: User
@@ -17,7 +17,6 @@ struct UnsplashPhoto: Codable {
 // MARK: - Модель URL фотографий разных размеров
 // Decodable, т.к. работаем только с получением данных.
 struct PhotoURLs: Decodable {
-// все ли свойства нужны? может стоит от каких-то избавитья, которые не используется - в этой и в других codable моделях
     let raw: String
     let full: String
     let regular: String

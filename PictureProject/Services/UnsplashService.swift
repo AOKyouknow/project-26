@@ -19,7 +19,7 @@ protocol UnsplashServiceProtocol {
 //TODO: 1 - можно написать некий базовы класс, который будет выполнять роль основного сервиса, то есть если тебе потребуется с 10 экранов делать 10 запросов, чтобы не писать каждый раз один и тот же код, создавая URL.session, а, например, а) наследоваться от основного класса б) сделать некий сервис прослойку, который будет обращаться к основному сервису, прокидывая в него только урл и другие нужные данные. В то же время протокол по-прежнему нужен, это очень хорошо.
 class UnsplashService: UnsplashServiceProtocol {
     //TODO: 3 - можно ли как-то безопасно хранить данный ключ?
-    private let accessKey = ""
+    private let accessKey = "sA_clGtZeYnKVP67LxrqQgz1xfVJfgeUqsB4scBim7k"
     private let baseURL = "https://api.unsplash.com"
     
     func fetchRandomPhotos(count: Int, completion: @escaping (Result<[UIImage], Error>) -> Void) {
