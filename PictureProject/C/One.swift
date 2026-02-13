@@ -144,8 +144,8 @@ class One: UIViewController {
     }
 }
 // MARK: - ПРОТОКОЛЫ
-//Создаём ячейки.
-extension One: UICollectionViewDataSource, UICollectionViewDelegate {
+//Создаём ячейки.UICollectionViewDelegate
+extension One: UICollectionViewDataSource  {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.images.count
     }
@@ -156,10 +156,19 @@ extension One: UICollectionViewDataSource, UICollectionViewDelegate {
             fatalError("Failed to dequeue CustomCollectionViewCell in OneController")
         }
         let image = self.images[indexPath.row]
-        cell.configure(with: image)
+    //cell.configure(with: image)
+        cell.delegate = self//ВАЖНО! Устанавливаем делегат для кнопки избранного
+        cell.configure(
+                with: image,
+                author: "Автор \(indexPath.row + 1)", // Замените на реальные данные
+                photoId: "id_\(indexPath.row)"
+            )
+        
         return cell
     }
 } // конец расширения
+
+
 
 // НАСТРОЙКА ИЗОБРАЖЕНИЙ В collection view!!!!!!!!!!!!
 extension One: UICollectionViewDelegateFlowLayout{
@@ -282,3 +291,77 @@ extension One: UISearchBarDelegate{
         }
     }
 }// конец расширения
+
+
+//новое
+// MARK: - CustomCollectionViewCellDelegate
+extension One: CustomCollectionViewCellDelegate {
+    func didTapFavoriteButton(in cell: CustomCollectionViewCell) {
+        guard let indexPath = collectionView.indexPath(for: cell),
+              let photoID = getPhotoID(for: indexPath) else { return }
+        
+        // Создаем объект для избранного
+        let photo = createFavoritePhoto(from: indexPath, id: photoID)
+        let isNowFavorite = FavoritesService.shared.toggleFavorite(photo)
+        
+        // Обновляем иконку в ячейке
+        cell.updateFavoriteButton(isFavorite: isNowFavorite)
+        
+        // Анимация
+        animateFavoriteButton(cell.favoriteButton)
+    }
+    
+    private func getPhotoID(for indexPath: IndexPath) -> String? {
+        // Здесь вам нужно передавать ID фото из вашей модели
+        // Пока используем временный ID на основе индекса
+        return "photo_\(indexPath.row)_\(Date().timeIntervalSince1970)"
+    }
+    
+    private func createFavoritePhoto(from indexPath: IndexPath, id: String) -> FavoritePhoto {
+        // Здесь нужно создать FavoritePhoto из ваших данных
+        return FavoritePhoto(
+            id: id,
+            authorName: "Author \(indexPath.row)", // Замените на реальное имя
+            authorUsername: "user\(indexPath.row)", // Замените на реальный username
+            smallImageURL: "", // Добавьте URL
+            regularImageURL: "", // Добавьте URL
+            createdAt: Date(),
+            imageData: images[indexPath.row].jpegData(compressionQuality: 0.7)
+        )
+    }
+    
+    private func animateFavoriteButton(_ button: UIButton) {
+        UIView.animate(withDuration: 0.2, animations: {
+            button.transform = CGAffineTransform(scaleX: 1.3, y: 1.3)
+        }, completion: { _ in
+            UIView.animate(withDuration: 0.2) {
+                button.transform = .identity
+            }
+        })
+    }
+}
+
+extension One: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        
+        // Создаем объект для детального экрана
+        let image = images[indexPath.row]
+        let photoId = "id_\(indexPath.row)"
+        
+        // Создаем FavoritePhoto для передачи
+        let favoritePhoto = FavoritePhoto(
+            id: photoId,
+            authorName: "Автор \(indexPath.row + 1)",
+            authorUsername: "user\(indexPath.row)",
+            smallImageURL: "",
+            regularImageURL: "",
+            createdAt: Date(),
+            imageData: image.jpegData(compressionQuality: 0.8)
+        )
+        
+        // Переход на детальный экран
+        let detailVC = DetailViewController(favorite: favoritePhoto)
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+}
